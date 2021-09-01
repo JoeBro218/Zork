@@ -29,7 +29,7 @@ namespace Zork
                     case Commands.SOUTH:
                     case Commands.EAST:
                     case Commands.WEST:
-                        outputString = "You moved " + command + ".";
+                        outputString = string.Format("You moved {0}.", command);
                         break;
 
                     default:
