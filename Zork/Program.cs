@@ -4,6 +4,16 @@ namespace Zork
 {
     class Program
     {
+
+        private static string Location
+        {
+            get
+            {
+                return Rooms[LocationColumn];
+            }
+        }
+
+
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Zork!");
@@ -11,7 +21,7 @@ namespace Zork
             Commands command = Commands.UNKNOWN;
             while(command != Commands.QUIT)
             {
-                Console.Write("> ");
+                Console.Write($"{Rooms[LocationColumn]}\n> ");
                 command = ToCommand(Console.ReadLine().Trim());
 
                 string outputString;
@@ -29,7 +39,7 @@ namespace Zork
                     case Commands.SOUTH:
                     case Commands.EAST:
                     case Commands.WEST:
-                        outputString = $"You moved {command}.";
+                        outputString = Move(command) ? $"You moved {command}." : "The way is shut.";
                         break;
 
                     default:
@@ -41,6 +51,34 @@ namespace Zork
             }
         }
 
+        private static bool Move(Commands command)
+        {
+            bool didMove = false;
+
+            switch(command)
+            {
+                case Commands.NORTH:
+                case Commands.SOUTH:
+                    didMove = false;
+                    break;
+
+                case Commands.EAST when LocationColumn < Rooms.Length - 1:
+                    LocationColumn++;
+                    didMove = true;
+                    break;
+
+                case Commands.WEST when LocationColumn > 0:
+                    LocationColumn--;
+                    didMove = true;
+                    break;
+            }
+
+            return didMove;
+        }
+
         private static Commands ToCommand(string commandString) => Enum.TryParse(commandString, true, out Commands result) ? result : Commands.UNKNOWN;
+
+        private static string[] Rooms = { "Forest", "West of House", "Behind House", "Clearing", "Canyon View" };
+        private static int LocationColumn = 1;
     }
 }
