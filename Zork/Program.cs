@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Zork
 {
     class Program
     {
 
-        private static string Location
+        private static string CurrentRoom
         {
             get
             {
-                return Rooms[LocationColumn];
+                return Rooms[Location.Row, Location.Column];
             }
         }
 
@@ -21,7 +22,7 @@ namespace Zork
             Commands command = Commands.UNKNOWN;
             while(command != Commands.QUIT)
             {
-                Console.Write($"{Rooms[LocationColumn]}\n> ");
+                Console.Write($"{CurrentRoom}\n> ");
                 command = ToCommand(Console.ReadLine().Trim());
 
                 string outputString;
@@ -57,18 +58,23 @@ namespace Zork
 
             switch(command)
             {
-                case Commands.NORTH:
-                case Commands.SOUTH:
-                    didMove = false;
-                    break;
-
-                case Commands.EAST when LocationColumn < Rooms.Length - 1:
-                    LocationColumn++;
+                case Commands.NORTH when Location.Row > 0:
+                    Location.Row--;
                     didMove = true;
                     break;
 
-                case Commands.WEST when LocationColumn > 0:
-                    LocationColumn--;
+                case Commands.SOUTH when Location.Row < Rooms.GetLength(1) - 1:
+                    Location.Row++;
+                    didMove = true;
+                    break;
+
+                case Commands.EAST when Location.Column < Rooms.GetLength(1) - 1:
+                    Location.Column++;
+                    didMove = true;
+                    break;
+
+                case Commands.WEST when Location.Column > 0:
+                    Location.Column--;
                     didMove = true;
                     break;
             }
@@ -84,7 +90,6 @@ namespace Zork
             { "Forest", "West of House", "Behind House" },
             { "Rocky Trail", "South of House", "Canyon View" }
         };
-        private static int LocationColumn = 1;
-        private static int LocationRow = 1;
+        private static (int Row, int Column) Location = (1, 1);
     }
 }
