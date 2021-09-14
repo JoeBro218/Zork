@@ -54,6 +54,8 @@ namespace Zork
 
         private static bool Move(Commands command)
         {
+            Assert.IsTrue(IsDirection(command), "Invalid direction.");
+
             bool didMove = false;
 
             switch(command)
@@ -84,12 +86,23 @@ namespace Zork
 
         private static Commands ToCommand(string commandString) => Enum.TryParse(commandString, true, out Commands result) ? result : Commands.UNKNOWN;
 
+        private static bool IsDirection(Commands command) => Directions.Contains(command);
+
         private static string[,] Rooms = 
         {           
             { "Dense Woods", "North of House", "Clearing" },
             { "Forest", "West of House", "Behind House" },
             { "Rocky Trail", "South of House", "Canyon View" }
         };
+
+        private static readonly List<Commands> Directions = new List<Commands>
+        {
+            Commands.NORTH,
+            Commands.SOUTH,
+            Commands.EAST,
+            Commands.WEST
+        };
+
         private static (int Row, int Column) Location = (1, 1);
     }
 }
