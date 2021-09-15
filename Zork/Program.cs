@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Zork
 {
@@ -33,7 +32,7 @@ namespace Zork
                         break;
 
                     case Commands.LOOK:
-                        outputString = "This is an open field west of a white house, with a boarded front door. A rubber mat saying 'Welcome to Zork!' lies by the door.";
+                        outputString = "This is an open field west of a white house, with a boarded front door.\nA rubber mat saying 'Welcome to Zork!' lies by the door.";
                         break;
 
                     case Commands.NORTH:
