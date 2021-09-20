@@ -6,7 +6,7 @@ namespace Zork
     class Program
     {
 
-        private static string CurrentRoom
+        private static Room CurrentRoom
         {
             get
             {
@@ -33,7 +33,7 @@ namespace Zork
                         break;
 
                     case Commands.LOOK:
-                        outputString = "This is an open field west of a white house, with a boarded front door.\nA rubber mat saying 'Welcome to Zork!' lies by the door.";
+                        outputString = CurrentRoom.Description;
                         break;
 
                     case Commands.NORTH:
@@ -88,11 +88,11 @@ namespace Zork
 
         private static bool IsDirection(Commands command) => Directions.Contains(command);
 
-        private static string[,] Rooms = 
+        private static Room[,] Rooms = 
         {           
-            { "Dense Woods", "North of House", "Clearing" },
-            { "Forest", "West of House", "Behind House" },
-            { "Rocky Trail", "South of House", "Canyon View" }
+            { new Room("Dense Woods"), new Room("North of House"), new Room("Clearing") },
+            { new Room("Forest"), new Room("West of House"), new Room("Behind House") },
+            { new Room("Rocky Trail"), new Room("South of House"), new Room("Canyon View") }
         };
 
         private static readonly List<Commands> Directions = new List<Commands>
