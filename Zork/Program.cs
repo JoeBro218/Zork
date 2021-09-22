@@ -84,6 +84,11 @@ namespace Zork
             return didMove;
         }
 
+        private static void InitializeRoomDescriptions()
+        {
+            
+        }
+
         private static Commands ToCommand(string commandString) => Enum.TryParse(commandString, true, out Commands result) ? result : Commands.UNKNOWN;
 
         private static bool IsDirection(Commands command) => Directions.Contains(command);
