@@ -18,6 +18,7 @@ namespace Zork
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Zork!");
+            InitializeRoomDescriptions();
 
             Commands command = Commands.UNKNOWN;
             while(command != Commands.QUIT)
