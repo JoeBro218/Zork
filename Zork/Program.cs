@@ -24,13 +24,13 @@ namespace Zork
             Commands command = Commands.UNKNOWN;
             while(command != Commands.QUIT)
             {
-                Console.Write($"{CurrentRoom}\n> ");
-
+                Console.WriteLine(CurrentRoom);
                 if(previousRoom != CurrentRoom)
                 {
                     Console.WriteLine(CurrentRoom.Description);
                     previousRoom = CurrentRoom;
                 }
+                Console.Write("> ");
 
                 command = ToCommand(Console.ReadLine().Trim());
 
