@@ -101,28 +101,25 @@ namespace Zork
 
         private static bool IsDirection(Commands command) => Directions.Contains(command);
 
-        private static Room[,] Rooms = 
-        {           
-            { new Room("Dense Woods"), new Room("North of House"), new Room("Clearing") },
-            { new Room("Forest"), new Room("West of House"), new Room("Behind House") },
-            { new Room("Rocky Trail"), new Room("South of House"), new Room("Canyon View") }
-        };
+        private static Room[,] Rooms;
 
         private static void InitializeRoomDescriptions(string RoomDescriptionFilename)
         {
-            var roomMap = new Dictionary<string, Room>();
-            foreach (Room room in Rooms)
-            {
-                roomMap.Add(room.Name, room);
-            }
+            //var roomMap = new Dictionary<string, Room>();
+            //foreach (Room room in Rooms)
+            //{
+            //    roomMap.Add(room.Name, room);
+            //}
 
-            string roomsJsonString = File.ReadAllText(RoomDescriptionFilename);
-            Room[] rooms = JsonConvert.DeserializeObject<Room[]>(roomsJsonString);
+            Rooms = JsonConvert.DeserializeObject<Room[,]>(File.ReadAllText(RoomDescriptionFilename));
 
-            foreach(Room room in rooms)
-            {
-                roomMap[room.Name].Description = room.Description;
-            }
+            //string roomsJsonString = File.ReadAllText(RoomDescriptionFilename);
+            //Room[] rooms = JsonConvert.DeserializeObject<Room[]>(roomsJsonString);
+
+            //foreach(Room room in rooms)
+            //{
+            //    roomMap[room.Name].Description = room.Description;
+            //}
 
             //const string delimiter = "##";
             //const int expectedFieldCount = 2;
