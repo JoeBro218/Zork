@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace Zork
@@ -34,13 +34,13 @@ namespace Zork
             }
         }
 
-        public bool Move(Commands command)
+        public bool Move(Commands commands)
         {
-            Assert.IsTrue(Directions.Contains(command), "Invalid direction.");
+            Assert.IsTrue(Directions.Contains(commands), "Invalid direction.");
 
             bool didMove = false;
 
-            switch (command)
+            switch (commands)
             {
                 case Commands.NORTH when Location.Row > 0:
                     Location.Row--;
