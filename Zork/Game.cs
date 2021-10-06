@@ -60,7 +60,7 @@ namespace Zork
                     case Commands.SOUTH:
                     case Commands.EAST:
                     case Commands.WEST:
-                        outputString = Player.Move(command) ? $"You moved {command}." : "The way is shut.";
+                        outputString = Player.Move((Directions)command) ? $"You moved {command}." : "The way is shut.";
                         Moves += 1;
                         break;
 
