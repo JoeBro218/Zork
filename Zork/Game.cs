@@ -25,7 +25,7 @@ namespace Zork
 
         public void Run()
         {
-            Console.WriteLine("Welcome to Zork!");
+            Console.WriteLine(WelcomeMessage);
 
             Room previousRoom = null;
             Commands command = Commands.UNKNOWN;
@@ -45,7 +45,7 @@ namespace Zork
                 switch (command)
                 {
                     case Commands.QUIT:
-                        outputString = "Thank you for playing!";
+                        outputString = ExitMessage;
                         break;
 
                     case Commands.LOOK:

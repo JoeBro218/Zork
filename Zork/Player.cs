@@ -17,7 +17,7 @@ namespace Zork
             }
         }
 
-        public Player(World world, string startingLocation)
+        public Player(World world, string startinglocation)
         {
             World = world;
 
@@ -25,7 +25,7 @@ namespace Zork
             {
                 for (int Column = 0; Column < World.Rooms.GetLength(1);Column++)
                 {
-                    if (World.Rooms[Row, Column].Name.Equals(startingLocation, StringComparison.OrdinalIgnoreCase))
+                    if (World.Rooms[Row, Column].Name.Equals(startinglocation, StringComparison.OrdinalIgnoreCase))
                     {
                         Location = (Row, Column);
                         return;
