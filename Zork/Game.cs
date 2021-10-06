@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using System.Runtime.Serialization;
-using System;
 
 namespace Zork
 {
@@ -39,7 +39,7 @@ namespace Zork
                 }
                 Console.Write("> ");
 
-                command = Console.ReadLine().Trim().ToCommand();
+                command = ToCommand(Console.ReadLine().Trim());
 
                 string outputString;
                 switch (command)
@@ -67,5 +67,7 @@ namespace Zork
                 Console.WriteLine(outputString);
             }
         }
+
+        private static Commands ToCommand(string commandString) => Enum.TryParse<Commands>(commandString, true, out Commands result) ? result : Commands.UNKNOWN;
     }
 }

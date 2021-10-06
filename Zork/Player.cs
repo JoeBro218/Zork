@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Linq;
 
 namespace Zork
@@ -6,7 +7,8 @@ namespace Zork
     public class Player
     {
         public World World { get; }
-
+        
+        [JsonIgnore]
         public Room CurrentRoom
         {
             get
@@ -32,13 +34,13 @@ namespace Zork
             }
         }
 
-        public bool Move(Commands commands)
+        public bool Move(Commands command)
         {
-            Assert.IsTrue(IsDirection(commands), "Invalid direction.");
+            Assert.IsTrue(Directions.Contains(command), "Invalid direction.");
 
             bool didMove = false;
 
-            switch (commands)
+            switch (command)
             {
                 case Commands.NORTH when Location.Row > 0:
                     Location.Row--;
@@ -66,7 +68,7 @@ namespace Zork
 
 
 
-        private static readonly List<Commands> Directions = new List<Commands>
+        private static readonly Commands[] Directions =
         {
             Commands.NORTH,
             Commands.SOUTH,
@@ -74,6 +76,6 @@ namespace Zork
             Commands.WEST
         };
 
-        private static (int Row, int Column) Location;
+        private (int Row, int Column) Location;
     }
 }
