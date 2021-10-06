@@ -9,13 +9,9 @@ namespace Zork
         public World World { get; }
         
         [JsonIgnore]
-        public Room CurrentRoom
-        {
-            get
-            {
-                return World.Rooms[Location.Row, Location.Column];
-            }
-        }
+        public Room CurrentRoom { get; set; }
+
+        public Room PreviousRoom { get; set; }
 
         public Player(World world, string startinglocation)
         {
@@ -34,36 +30,15 @@ namespace Zork
             }
         }
 
-        public bool Move(Commands commands)
+        public bool Move(Directions direction)
         {
-            Assert.IsTrue(Directions.Contains(commands), "Invalid direction.");
-
-            bool didMove = false;
-
-            switch (commands)
+            bool IsVaildMove = CurrentRoom.Neighbors.TryGetValue(direction, out Room neighbor);
+            if (IsVaildMove)
             {
-                case Commands.NORTH when Location.Row > 0:
-                    Location.Row--;
-                    didMove = true;
-                    break;
-
-                case Commands.SOUTH when Location.Row < World.Rooms.GetLength(1) - 1:
-                    Location.Row++;
-                    didMove = true;
-                    break;
-
-                case Commands.EAST when Location.Column < World.Rooms.GetLength(1) - 1:
-                    Location.Column++;
-                    didMove = true;
-                    break;
-
-                case Commands.WEST when Location.Column > 0:
-                    Location.Column--;
-                    didMove = true;
-                    break;
+                CurrentRoom = neighbor;
             }
 
-            return didMove;
+            return IsVaildMove;
         }
 
 
@@ -75,7 +50,5 @@ namespace Zork
             Commands.EAST,
             Commands.WEST
         };
-
-        private (int Row, int Column) Location;
     }
 }

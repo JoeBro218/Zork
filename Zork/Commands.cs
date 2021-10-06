@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Zork
+﻿namespace Zork
 {
     public enum Commands
     {
@@ -10,6 +8,8 @@ namespace Zork
         SOUTH,
         EAST,
         WEST,
+        REWARD,
+        SCORE,
         UNKNOWN
     }
 }

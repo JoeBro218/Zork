@@ -11,8 +11,6 @@ namespace Zork
             string GameFilename = args.Length > 0 ? args[(int)CommandLineArgument.GameFilename] : DefaultGameFilename;
             Game game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(GameFilename));
             game.Run();
-
-            System.Console.WriteLine(game.Player.CurrentRoom);
         }
 
         private enum CommandLineArgument
