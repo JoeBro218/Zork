@@ -1,6 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
-using System.Linq;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Zork
 {
@@ -9,46 +8,37 @@ namespace Zork
         public World World { get; }
         
         [JsonIgnore]
-        public Room CurrentRoom { get; set; }
+        public Room Location { get; set; }
 
-        public Room PreviousRoom { get; set; }
+        [JsonIgnore]
+        public string LocationName
+        {
+            get
+            {
+                return Location?.Name;
+            }
+            set
+            {
+                Location = World?.RoomsByName.GetValueOrDefault(value);
+            }
+        }
 
         public Player(World world, string startinglocation)
         {
             World = world;
 
-            for(int Row = 0; Row < World.Rooms.GetLength(0); Row++)
-            {
-                for (int Column = 0; Column < World.Rooms.GetLength(1);Column++)
-                {
-                    if (World.Rooms[Row, Column].Name.Equals(startinglocation, StringComparison.OrdinalIgnoreCase))
-                    {
-                        Location = (Row, Column);
-                        return;
-                    }
-                }
-            }
+            LocationName = startinglocation;
         }
 
         public bool Move(Directions direction)
         {
-            bool IsVaildMove = CurrentRoom.Neighbors.TryGetValue(direction, out Room neighbor);
+            bool IsVaildMove = Location.Neighbors.TryGetValue(direction, out Room neighbor);
             if (IsVaildMove)
             {
-                CurrentRoom = neighbor;
+                Location = neighbor;
             }
 
             return IsVaildMove;
         }
-
-
-
-        private static readonly Commands[] Directions =
-        {
-            Commands.NORTH,
-            Commands.SOUTH,
-            Commands.EAST,
-            Commands.WEST
-        };
     }
 }

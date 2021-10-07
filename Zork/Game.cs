@@ -1,6 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
-using System.Runtime.Serialization;
+using System.IO;
 
 namespace Zork
 {
@@ -10,94 +10,97 @@ namespace Zork
         private int Score = 0;
         public World World { get; set;}
 
-        public string StartingLocation { get; set;}
-
         [JsonIgnore]
         public Player Player { get; private set;}
 
-        public string WelcomeMessage { get; set;}
+        [JsonIgnore]
+        public bool IsRunning { get; set; }
 
-        public string ExitMessage { get; set;}
-
-        [OnDeserialized]
-        private void OnDeserialized(StreamingContext context)
+        public Game(World world, Player player)
         {
-            Player = new Player(World, StartingLocation);
+            World = world;
+            Player = player;
         }
+
 
         public void Run()
         {
-            Console.WriteLine(WelcomeMessage);
-
+            IsRunning = true;
             Room previousRoom = null;
-            Commands command = Commands.UNKNOWN;
-            while (command != Commands.QUIT)
+            while (IsRunning)
             {
-                Console.WriteLine(Player.CurrentRoom);
-                if (previousRoom != Player.CurrentRoom)
+                Console.WriteLine(Player.Location);
+                if (previousRoom != Player.Location)
                 {
-                    Console.WriteLine(Player.CurrentRoom.Description);
-                    previousRoom = Player.CurrentRoom;
+                    Console.WriteLine(Player.Location.Description);
+                    previousRoom = Player.Location;
                 }
                 Console.Write("> ");
 
-                command = ToCommand(Console.ReadLine().Trim());
+                Commands command = ToCommand(Console.ReadLine().Trim());
 
-                string outputString;
                 switch (command)
                 {
                     case Commands.QUIT:
-                        outputString = ExitMessage;
+                        IsRunning = false;
                         Console.WriteLine($"Your final score is {Score} and the amount of moves you made are {Moves}.");
                         Moves += 1;
                         break;
 
                     case Commands.LOOK:
-                        outputString = Player.CurrentRoom.Description;
+                        Console.WriteLine(Player.Location.Description);
                         break;
 
                     case Commands.NORTH:
                     case Commands.SOUTH:
                     case Commands.EAST:
                     case Commands.WEST:
-                        outputString = Player.Move((Directions)command) ? $"You moved {command}." : "The way is shut.";
+                        Console.WriteLine(Player.Move((Directions)command) ? $"You moved {command}." : "The way is shut.");
                         Moves += 1;
                         break;
 
                     case Commands.REWARD:
                         Random RanNum = new Random();
-                        int Num = RanNum.Next(1, 10);
+                        int Num = RanNum.Next(1, 11);
                         string message = "place holder";
-                        if(Num == 1)
+                        if (Num == 1)
                         {
                             message = "A rock. It's worthless.";
                         }
-                        else if(Num > 1 && Num < 10)
+                        else if (Num > 1 && Num < 10)
                         {
                             message = "Woah! Free Coin!";
                             Score += 1;
                         }
-                        else if(Num == 10)
+                        else if (Num >= 10)
                         {
                             message = "Shinny Gold Egg!";
                             Score += 10;
                         }
                         Moves += 1;
-                        outputString = message;
+                        Console.WriteLine(message);
                         break;
 
                     case Commands.SCORE:
                         Moves += 1;
-                        outputString = $"Your score is {Score} and you have made {Moves} moves.";
+                        Console.WriteLine($"Your score is {Score} and you have made {Moves} moves.");
                         break;
 
                     default:
-                        outputString = "Unknown command.";
+                        Console.WriteLine("Unknown command.");
                         break;
                 }
-                Console.WriteLine(outputString);
             }
         }
+
+        public static Game Load(string filename)
+        {
+            Game game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(filename));
+            game.Player = game.World.SpawnPlayer();
+            
+            return game;
+        }
+
         private static Commands ToCommand(string commandString) => Enum.TryParse<Commands>(commandString, true, out Commands result) ? result : Commands.UNKNOWN;
     }
 }
