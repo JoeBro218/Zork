@@ -13,6 +13,10 @@ namespace Zork
         [JsonIgnore]
         public Player Player { get; private set;}
 
+        public string WelcomeMessage { get; set; }
+
+        public string ExitMessage { get; set; }
+
         [JsonIgnore]
         public bool IsRunning { get; set; }
 
@@ -25,6 +29,8 @@ namespace Zork
 
         public void Run()
         {
+            Console.WriteLine(WelcomeMessage);
+
             IsRunning = true;
             Room previousRoom = null;
             while (IsRunning)
@@ -43,8 +49,9 @@ namespace Zork
                 {
                     case Commands.QUIT:
                         IsRunning = false;
-                        Console.WriteLine($"Your final score is {Score} and the amount of moves you made are {Moves}.");
                         Moves += 1;
+                        Console.WriteLine($"Your final score is {Score} and the amount of moves you made are {Moves}.");
+                        Console.WriteLine(ExitMessage);
                         break;
 
                     case Commands.LOOK:
