@@ -45,5 +45,11 @@ namespace Zork
         public override int GetHashCode() => Name.GetHashCode();
 
         public void UpdateNeighbors(World world) => Neighbors = (from entry in NeighborNames let room = world.RoomsByName.GetValueOrDefault(entry.Value) where room != null select (Direction: entry.Key, Room: room)).ToDictionary(pair => pair.Direction, pair => pair.Room);
+    
+        //public void UpdateNeighbors(World world)
+        //{
+        //    Neighbors = new Dictionary<>
+        //    foreach
+        //}
     }
 }
