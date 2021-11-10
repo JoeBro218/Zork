@@ -17,6 +17,8 @@ namespace Zork
 
         public string ExitMessage { get; set; }
 
+        public IOutputService Output { get; set; }
+
         [JsonIgnore]
         public bool IsRunning { get; set; }
 
@@ -29,19 +31,19 @@ namespace Zork
 
         public void Run()
         {
-            Console.WriteLine(WelcomeMessage);
+            Output.WriteLine(WelcomeMessage);
 
             IsRunning = true;
             Room previousRoom = null;
             while (IsRunning)
             {
-                Console.WriteLine(Player.Location);
+                Output.WriteLine(Player.Location);
                 if (previousRoom != Player.Location)
                 {
-                    Console.WriteLine(Player.Location.Description);
+                    Output.WriteLine(Player.Location.Description);
                     previousRoom = Player.Location;
                 }
-                Console.Write("> ");
+                Output.Write("> ");
 
                 Commands command = ToCommand(Console.ReadLine().Trim());
 
@@ -50,19 +52,19 @@ namespace Zork
                     case Commands.QUIT:
                         IsRunning = false;
                         Moves += 1;
-                        Console.WriteLine($"Your final score is {Score} and the amount of moves you made are {Moves}.");
-                        Console.WriteLine(ExitMessage);
+                        Output.WriteLine($"Your final score is {Score} and the amount of moves you made are {Moves}.");
+                        Output.WriteLine(ExitMessage);
                         break;
 
                     case Commands.LOOK:
-                        Console.WriteLine(Player.Location.Description);
+                        Output.WriteLine(Player.Location.Description);
                         break;
 
                     case Commands.NORTH:
                     case Commands.SOUTH:
                     case Commands.EAST:
                     case Commands.WEST:
-                        Console.WriteLine(Player.Move((Directions)command) ? $"You moved {command}." : "The way is shut.");
+                        Output.WriteLine(Player.Move((Directions)command) ? $"You moved {command}." : "The way is shut.");
                         Moves += 1;
                         break;
 
@@ -85,25 +87,26 @@ namespace Zork
                             Score += 10;
                         }
                         Moves += 1;
-                        Console.WriteLine(message);
+                        Output.WriteLine(message);
                         break;
 
                     case Commands.SCORE:
                         Moves += 1;
-                        Console.WriteLine($"Your score is {Score} and you have made {Moves} moves.");
+                        Output.WriteLine($"Your score is {Score} and you have made {Moves} moves.");
                         break;
 
                     default:
-                        Console.WriteLine("Unknown command.");
+                        Output.WriteLine("Unknown command.");
                         break;
                 }
             }
         }
 
-        public static Game Load(string filename)
+        public static Game Load(string filename, IOutputService output)
         {
             Game game = JsonConvert.DeserializeObject<Game>(File.ReadAllText(filename));
             game.Player = game.World.SpawnPlayer();
+            game.Output = output;
             
             return game;
         }
